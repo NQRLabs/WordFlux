@@ -3,25 +3,28 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Wordflux · a tiny Wordle clone</title>
-  <meta name="description" content="A Wordle-style game in the same visual style as GlyphGrid.">
+  <title>WordFlux Â· a tiny Wordle clone</title>
+  <meta name="description" content="A Wordle-style game.">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     :root{
-      /* GlyphGrid-adjacent palette */
-      --gg-bg:#0c1020;            /* page background */
-      --gg-card:#121735;          /* card background */
-      --gg-ink:#eef1ff;           /* primary text */
-      --gg-ink-dim:#b9c6ef;       /* secondary text */
-      --gg-accent:#7cc9ff;        /* cyan accent */
-      --gg-outline:#86a6ff;       /* focus outline */
-      --gg-border:#2b3868;        /* card borders */
+      /* Palette */
+      --gg-bg:#0c1020;
+      --gg-card:#121735;
+      --gg-ink:#eef1ff;
+      --gg-ink-dim:#b9c6ef;
+      --gg-outline:#86a6ff;
+      --gg-border:#2b3868;
 
-      /* wordle feedback colors tuned for this palette */
-      --tile-correct:#3fb57f;     /* green */
-      --tile-present:#d1a341;     /* yellow */
-      --tile-absent:#3a4372;      /* gray-blue */
-      --tile-idle:#0f1439;        /* default tile */
+      /* Tile colors */
+      --tile-correct:#3fb57f;
+      --tile-present:#d1a341;
+      --tile-absent:#3a4372;
+      --tile-idle:#0f1439;
+
+      /* Sizing knob shared by board + keyboard */
+      --board-max: 560px;
+      --k-gap:.5rem;
     }
 
     html,body{height:100%}
@@ -31,7 +34,7 @@
       -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
       overflow-x: hidden;
     }
-    /* fixed gradient backdrop like GlyphGrid */
+    /* gradient backdrop */
     body::before{
       content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
       background:
@@ -45,7 +48,7 @@
     .gg-muted{ color:var(--gg-ink-dim); }
 
     /* Board */
-    .board{ display:grid; grid-template-rows: repeat(6, 1fr); gap:.6rem; width:min(460px, 92vw); margin-inline:auto; }
+    .board{ display:grid; grid-template-rows: repeat(6, 1fr); gap:.6rem; width:min(100%, var(--board-max)); margin-inline:auto; }
     .row{ display:grid; grid-template-columns: repeat(5, 1fr); gap:.6rem; }
     .tile{
       aspect-ratio:1/1; display:grid; place-items:center; font-weight:800; font-size:28px; text-transform:uppercase;
@@ -62,34 +65,46 @@
     .tile.active{ outline:2px solid var(--gg-outline); box-shadow:0 0 0 3px rgba(134,166,255,.25) inset; }
     .tile.can-edit{ cursor:pointer; }
 
-    /* Keyboard */
-    .kbd{ display:grid; gap:.5rem; }
-    .kbd-row{ display:flex; gap:.5rem; justify-content:center; }
-    .key{ background:#10173b; color:#ffffff; border:1px solid var(--gg-border); border-radius:.6rem; padding:.6rem .7rem; font-weight:700; cursor:pointer; }
+    /* Keyboard (physical QWERTY layout, responsive) */
+    .kbd{ width:min(100%, var(--board-max)); margin:0 auto; padding:0 .25rem; }
+    .kbd-row{ display:flex; justify-content:center; align-items:center; gap:var(--k-gap); }
+    .key{ flex:1 1 0; min-width:0; background:#10173b; color:#ffffff; border:1px solid var(--gg-border); border-radius:.6rem; padding:.6rem .55rem; font-weight:700; cursor:pointer; font-size:clamp(12px, 2.2vw, 18px); white-space:nowrap; }
     .key[data-state="correct"]{ background:var(--tile-correct); border-color:var(--tile-correct); }
     .key[data-state="present"]{ background:var(--tile-present); border-color:var(--tile-present); }
     .key[data-state="absent"]{ background:var(--tile-absent); border-color:var(--tile-absent); color:#c9d2ff; }
-    .key.wide{ padding-inline:1.1rem; }
-    @media (max-height: 800px){
-      .board{ width:min(420px, 92vw); }
-      .tile{ font-size:24px; }
-    }
+    .key.wide{ flex:1.5 1 0; }
+    .spacer{ flex:.5 0 0; }
 
     /* Panels */
-    .panel{ padding:1rem; }
+    .panel{ padding:1rem; overflow:hidden; }
     .stat-pill{ background:#0f1432; border:1px solid var(--gg-border); border-radius:999px; padding:.3rem .65rem; color:#dce7ff; }
-
-    /* toasts */
     .toastify{ position:fixed; top:16px; left:50%; transform:translateX(-50%); background:#0f1432; color:#fff; border:1px solid var(--gg-border); border-radius:.75rem; padding:.5rem .8rem; z-index:1100; box-shadow:0 10px 30px rgba(0,0,0,.45); }
+
+    /* Compact breakpoints for phones: scale board+keyboard together via --board-max and tighten gaps */
+    @media (max-width: 480px){
+      :root { --board-max: 440px; --k-gap:.45rem; }
+      .row{ gap:.5rem; } .board{ gap:.5rem; }
+      .tile{ font-size:24px; }
+    }
+    @media (max-width: 390px){
+      :root { --board-max: 400px; --k-gap:.4rem; }
+      .row{ gap:.45rem; } .board{ gap:.45rem; }
+      .tile{ font-size:22px; }
+    }
+    @media (max-width: 340px){
+      :root { --board-max: 360px; --k-gap:.35rem; }
+      .row{ gap:.4rem; } .board{ gap:.4rem; }
+      .tile{ font-size:20px; }
+    }
   </style>
 </head>
 <body>
   <!-- NAV -->
   <nav class="navbar navbar-expand-md bg-body-tertiary border-bottom border-dark-subtle sticky-top">
     <div class="container-lg">
-      <a class="navbar-brand fw-bold" href="#">Wordflux</a>
+      <a class="navbar-brand fw-bold" href="#">WordFlux</a>
       <span class="navbar-text small text-secondary ms-1">a tiny Wordle clone</span>
-      <div class="ms-auto d-flex gap-2">
+      <div class="ms-auto d-flex align-items-end gap-2">
         <button id="btnHelp" class="btn btn-outline-info btn-sm">How to play</button>
         <button id="btnStats" class="btn btn-outline-info btn-sm">Stats</button>
         <div class="ms-2">
@@ -104,7 +119,6 @@
   </nav>
 
   <main class="container-lg my-4">
-    <!-- Game Card -->
     <section class="gg-card p-3 mb-3" aria-labelledby="gameTitle">
       <div class="d-flex align-items-center gap-2 pb-2 border-bottom" style="border-color:var(--gg-border) !important;">
         <span class="badge rounded-pill gg-badge" id="gameTitle">Daily Puzzle</span>
@@ -115,7 +129,7 @@
 
       <div class="panel">
         <div class="board" id="board" aria-label="Word grid"></div>
-        <div class="mt-3"><div id="keyboard" class="kbd" aria-label="On-screen keyboard"></div></div>
+        <div class="mt-3" id="keyboard" class="kbd" aria-label="On-screen keyboard"></div>
       </div>
     </section>
   </main>
@@ -126,9 +140,9 @@
       <div class="modal-header border-0"><h5 class="modal-title">How to play</h5><button class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
       <div class="modal-body">
         <ol class="small mb-0">
-          <li>Guess the five‑letter word in six tries.</li>
+          <li>Guess the fiveâ€‘letter word in six tries.</li>
           <li>Each guess must be a valid word; press <b>Enter</b> to submit.</li>
-          <li>Tile colors show how close your guess was: <span class="stat-pill" style="background:var(--tile-correct); border-color:var(--tile-correct)">correct</span> • <span class="stat-pill" style="background:var(--tile-present); border-color:var(--tile-present)">present</span> • <span class="stat-pill" style="background:var(--tile-absent); border-color:var(--tile-absent)">absent</span>.</li>
+          <li>Tile colors show how close your guess was: <span class="stat-pill" style="background:var(--tile-correct); border-color:var(--tile-correct)">correct</span> â€¢ <span class="stat-pill" style="background:var(--tile-present); border-color:var(--tile-present)">present</span> â€¢ <span class="stat-pill" style="background:var(--tile-absent); border-color:var(--tile-absent)">absent</span>.</li>
         </ol>
       </div>
     </div></div>
@@ -148,15 +162,11 @@
       </div>
     </div></div>
   </div>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
   "use strict";
   // ===== Word lists (loaded from the web) =====
-  // We pull a big Allowed list and a curated Common list for solutions.
-  // Sources:
-  // 1) Tab Atkins' Wordle list (all valid guesses)
-  // 2) DarkerMango 5-letter words (MIT)
-  // 3) Shmookey's 3,103 common 5-letter words (solutions pool)
   const WORD_SOURCES = {
     allowed: [
       'https://raw.githubusercontent.com/tabatkins/wordle-list/main/words',
@@ -171,7 +181,6 @@
   let SOLUTIONS = ['CRANE','MAGIC','RAVEN','PIXEL','PLANT','SOUND','TRACE','CLOUD','BRAVE','FRAME'];
   let ALLOWED = new Set(SOLUTIONS);
 
-  // Robust line parser — avoids broken regex literals by building once here
   const LINE_SPLIT = /\r?\n/;
   const parseLines = (txt)=> txt
       .replace(/\u0000/g,'')
@@ -182,12 +191,10 @@
   async function loadWordLists(){
     try{
       const fetchText = async (url)=> (await fetch(url, {cache:'force-cache'})).text();
-      // Allowed (merge multiple sources)
       let allowed = [];
       for(const url of WORD_SOURCES.allowed){
         try{ const t = await fetchText(url); allowed = allowed.concat(parseLines(t)); }catch(e){ console.warn('Failed allowed src', url, e); }
       }
-      // Solutions from curated "common" list
       let common = [];
       for(const url of WORD_SOURCES.common){
         try{ const t = await fetchText(url); common = common.concat(parseLines(t)); }catch(e){ console.warn('Failed common src', url, e); }
@@ -203,7 +210,7 @@
   let board = [];     // strings per row
   let cursor = 0;     // index within current row
   let row = 0;        // current row
-  let solution = 'CRANE'; // temp until load; replaced in init
+  let solution = 'CRANE'; // replaced in init
   let finished = false;
 
   const els = {
@@ -226,7 +233,6 @@
       const line = document.createElement('div'); line.className = 'row';
       for(let c=0;c<cols;c++){
         const t = document.createElement('div'); t.className = 'tile'; t.dataset.r=r; t.dataset.c=c; t.setAttribute('aria-label',`r${r+1} c${c+1}`);
-        // Enable clicking in current row to move caret and edit that slot
         t.addEventListener('click', ()=> handleTileClick(r,c));
         line.appendChild(t);
       }
@@ -236,21 +242,37 @@
 
   function buildKeyboard(){
     els.keyboard.innerHTML = '';
-    const rowsK = [
-      [..."QWERTYUIOP"],
-      [..."ASDFGHJKL"],
-      ["ENTER",..."ZXCVBNM","DEL"]
-    ];
-    rowsK.forEach(krow=>{
-      const div = document.createElement('div'); div.className='kbd-row';
-      krow.forEach(label=>{
-        const b = document.createElement('button'); b.className='key'; b.textContent=label; b.dataset.key=label;
-        if(label.length>1) b.classList.add('wide');
-        b.addEventListener('click', ()=> handleKey(label));
-        div.appendChild(b);
-      });
-      els.keyboard.appendChild(div);
-    });
+
+    // Row 1: QWERTYUIOP
+    const r1 = document.createElement('div');
+    r1.className = 'kbd-row';
+    for(const ch of 'QWERTYUIOP') r1.appendChild(makeKey(ch));
+    els.keyboard.appendChild(r1);
+
+    // Row 2: spacer + ASDFGHJKL + spacer
+    const r2 = document.createElement('div');
+    r2.className = 'kbd-row';
+    r2.appendChild(makeSpacer());
+    for(const ch of 'ASDFGHJKL') r2.appendChild(makeKey(ch));
+    r2.appendChild(makeSpacer());
+    els.keyboard.appendChild(r2);
+
+    // Row 3: ENTER (wide) + ZXCVBNM + DEL (wide)
+    const r3 = document.createElement('div');
+    r3.className = 'kbd-row';
+    r3.appendChild(makeKey('ENTER', true));
+    for(const ch of 'ZXCVBNM') r3.appendChild(makeKey(ch));
+    r3.appendChild(makeKey('DEL', true));
+    els.keyboard.appendChild(r3);
+
+    function makeKey(label, wide=false){
+      const b = document.createElement('button');
+      b.className = 'key' + (wide?' wide':'');
+      b.textContent = label; b.dataset.key = label;
+      b.addEventListener('click', ()=> handleKey(label));
+      return b;
+    }
+    function makeSpacer(){ const s=document.createElement('div'); s.className='spacer'; return s; }
   }
 
   // ===== Game helpers =====
@@ -278,7 +300,6 @@
         const tile = document.querySelector(`.tile[data-r="${r}"][data-c="${c}"]`);
         tile.textContent = board[r][c];
         tile.classList.toggle('filled', !!board[r][c]);
-        // mark editable & active focus indicator for current row
         const isCurrentRow = (r===row && !finished);
         tile.classList.toggle('can-edit', isCurrentRow);
         tile.classList.toggle('active', isCurrentRow && c===cursor);
@@ -291,7 +312,7 @@
     if(guess.length<cols){ toast('Not enough letters'); return; }
     if(!ALLOWED.has(guess)){ toast('Not in word list'); return; }
     const result = score(guess, solution);
-    await revealRow(row, result); // ensure sequential flips
+    await revealRow(row, result);
     updateKeyboard(result, guess);
     const won = result.every(x=>x==='correct');
     row++; cursor=0;
@@ -301,7 +322,6 @@
   }
 
   function score(guess, target){
-    // Wordle rules: first mark greens, then yellows by remaining counts
     const res = Array(cols).fill('absent');
     const targetCounts = {};
     for(let i=0;i<cols;i++){
@@ -314,10 +334,9 @@
       const g = guess[i];
       if(targetCounts[g]>0){ res[i]='present'; targetCounts[g]--; }
     }
-    return res; // array of 'correct' | 'present' | 'absent'
+    return res;
   }
 
-  // Make reveals strictly sequential using animation events (fixes the cascade bug)
   async function revealRow(r, result){
     for(let c=0;c<cols;c++){
       const tile = document.querySelector(`.tile[data-r="${r}"][data-c="${c}"]`);
@@ -340,7 +359,7 @@
       if(!key) continue;
       const prev = key.getAttribute('data-state');
       const now = result[i];
-      if(prev==='correct') continue; // don't downgrade
+      if(prev==='correct') continue;
       if(prev==='present' && now==='absent') continue;
       key.setAttribute('data-state', now);
     }
@@ -377,7 +396,6 @@
   function handleKey(k){ if(finished) return; if(k==='ENTER') submitRow(); else if(k==='DEL') backspace(); else if(/^[A-Z]$/.test(k)) type(k); }
   function type(ch){ if(cursor>=cols) return; board[row][cursor]=ch; cursor=Math.min(cursor+1, cols-1); paintBoard(); }
   function backspace(){
-    // delete previous slot (classic Wordle behavior). If at col 0, clear current.
     if(cursor>0){ cursor--; board[row][cursor]=''; }
     else { board[row][cursor]=''; }
     paintBoard();
@@ -389,12 +407,10 @@
 
   document.addEventListener('keydown', (e)=>{
     if(finished) return;
-    const key = e.key;                // keep original for arrows
-    const k = key.toUpperCase();      // uppercase for letters/control names
-
+    const key = e.key;
+    const k = key.toUpperCase();
     if(key==='ArrowLeft'){ e.preventDefault(); moveLeft(); return; }
     if(key==='ArrowRight'){ e.preventDefault(); moveRight(); return; }
-
     if(k==='ENTER'){ e.preventDefault(); submitRow(); }
     else if(k==='BACKSPACE'){ e.preventDefault(); backspace(); }
     else if(k==='DELETE'){ e.preventDefault(); board[row][cursor]=''; paintBoard(); }
@@ -405,82 +421,34 @@
   els.btnNew.addEventListener('click', ()=>{
     const mode = getMode();
     const next = pickSolutionByMode();
-    if(mode==='daily' && next===solution){ toast('Daily mode — same word for today'); }
+    if(mode==='daily' && next===solution){ toast('Daily mode â€” same word for today'); }
     solution = next;
     resetGame();
     toast('New word!');
   });
   els.btnHelp.addEventListener('click', ()=> new bootstrap.Modal(document.getElementById('helpModal')).show());
   els.btnStats.addEventListener('click', ()=>{ updateStatsUI(); new bootstrap.Modal(document.getElementById('statsModal')).show(); });
+
   function resetGame(){
     finished=false; row=0; cursor=0; buildBoard(); buildKeyboard(); paintBoard();
-    els.keyboard.querySelectorAll('.key').forEach(k=> k.removeAttribute('data-state'));
+    document.querySelectorAll('.key').forEach(k=> k.removeAttribute('data-state'));
   }
 
-  // Mode UI wiring (if markup ever changes, we can inject)
-  function ensureModeUI(){
-    if(!els.modeSelect){
-      const container = document.querySelector('.navbar .container-lg .ms-auto');
-      if(container){
-        const wrap = document.createElement('div');
-        wrap.className = 'ms-2';
-        wrap.innerHTML = `
-          <label class="form-label small text-secondary mb-0">Mode</label>
-          <select id="modeSelect" class="form-select form-select-sm bg-dark text-light border-secondary">
-            <option value="daily">Daily</option>
-            <option value="random">Random</option>
-          </select>`;
-        container.appendChild(wrap);
-        els.modeSelect = wrap.querySelector('#modeSelect');
-      }
-    }
-  }
-  function wireModeUI(){
-    ensureModeUI();
-    if(!els.modeSelect) return; // nothing to wire
-    els.modeSelect.value = getMode();
-    els.modeSelect.onchange = ()=>{
-      setMode(els.modeSelect.value);
-      solution = pickSolutionByMode();
-      resetGame();
-      toast(`Mode: ${getMode()}`);
-    };
-  }
-
-  // ===== Dev self-tests (console only) =====
-  function runSelfTests(){
-    try{
-      const results=[]; const assert=(n,c)=>results.push(`${c?'✅':'❌'} ${n}`);
-      // parseLines
-      const p1 = parseLines('abcde\nxxxxx');
-      assert('parseLines keeps 5 letters', p1.includes('ABCDE'));
-      assert('parseLines filters non-5', parseLines('abcd\nabcdef').length===0);
-      // score correctness
-      const s1 = score('CRANE','CRATE');
-      assert('score CRANE vs CRATE', JSON.stringify(s1)===JSON.stringify(['correct','correct','correct','absent','correct']));
-      const s2 = score('APPLE','ALLEY');
-      assert('score APPLE vs ALLEY', JSON.stringify(s2)===JSON.stringify(['correct','absent','absent','present','present']));
-      const s3 = score('ALLEY','BALMY');
-      assert('score ALLEY vs BALMY (dupes)', JSON.stringify(s3)===JSON.stringify(['present','absent','correct','absent','present']));
-      // caret/typing behavior (non-destructive)
-      const snap = {row, cursor, board: board.map(r=> r.slice())};
-      try{
-        row=0; cursor=0; board[0]=Array(cols).fill('');
-        type('A'); moveRight(); type('B'); moveLeft(); backspace();
-        assert('caret move + type + backspace', board[0][0]==='A' && board[0][1]==='');
-      } finally { row=snap.row; cursor=snap.cursor; board=snap.board; paintBoard(); }
-      const out = results.join('\n');
-      console.log(`[Wordflux self-tests]\n${out}`);
-    }catch(e){ console.error('self-tests threw', e); }
-  }
+  // Mode UI wiring
+  els.modeSelect.addEventListener('change', ()=>{
+    setMode(els.modeSelect.value);
+    solution = pickSolutionByMode();
+    resetGame();
+    toast(`Mode: ${getMode()}`);
+  });
+  function syncModeUI(){ els.modeSelect.value = getMode(); }
 
   // ===== Init =====
   (async ()=>{
     await loadWordLists();
-    wireModeUI();
+    syncModeUI();
     solution = pickSolutionByMode();
     buildBoard(); buildKeyboard(); paintBoard(); updateStatsUI();
-    if (location.search.includes('dev=1')) runSelfTests();
   })();
   </script>
 </body>
