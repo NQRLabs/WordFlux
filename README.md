@@ -1,62 +1,79 @@
-<img width="1310" height="939" alt="Screenshot 2025-10-11 223940" src="https://github.com/user-attachments/assets/8ca75e0e-8cdf-4f01-937f-cff95e08735a" />
+<img alt="wordflux-logo" src="./assets/images/logo.png" style="margin-left:auto; margin-right:auto; display:block; width:250px;"/>
 
-# Wordflux
+# WordFlux
 
-A sleek, Wordle-style puzzle in a dark, modern aesthetic. Play with **click-to-edit tiles**, **arrow-key caret movement**, **sequential flip reveals**, and a **Daily / Random** mode toggle. The whole game ships as a single static `index.html`—no build step.
+**WordFlux** is a compact, browser-based word puzzle inspired by *Wordle*, reimagined in a sleek dark aesthetic with responsive design, smooth animations, and intuitive controls. It’s a single-page game that runs entirely in your browser — no installation, no accounts, and no build tools required.
 
----
+## Overview
+
+WordFlux blends clarity, responsiveness, and minimalism into a pure client-side experience.  
+Players can click tiles or use keyboard navigation to type guesses, with sequential flip animations revealing the results.  
+The game offers **Daily** and **Random** modes, tracks wins and streaks locally, and fetches its vocabulary from open, community-maintained word lists.  
+
+Everything operates fully client-side using standard browser APIs and Bootstrap’s UI components.
 
 ## Features
 
-- **Instant play** — open `index.html` in any modern browser.
-- **Editing UX** — click a tile in the active row to place the caret; use **← / →** to move.
-- **Smooth reveals** — per-tile, sequential flip animation (clean left-to-right cascade).
-- **Modes** — **Daily** (deterministic by date) or **Random** (new word each time), persisted in `localStorage`.
-- **Responsive QWERTY keyboard under the board** — physical layout with ENTER/DEL; board and keyboard scale together for mobile.
-- **Stats** — played / wins / streak saved locally in `localStorage`.
-- **Online word lists** — large “allowed” and curated “solutions” sets are fetched at runtime; a small fallback list is used automatically if the fetch fails.
-
----
+- **Instant play:** Open `index.html` directly in any modern browser.  
+- **Daily and Random modes:** Deterministic daily puzzles or on-demand random words, persisted via `localStorage`.  
+- **Interactive editing:** Click-to-edit tiles with full keyboard navigation (← / → / DEL / ENTER).  
+- **Smooth reveals:** Sequential flip animations that visually echo the rhythm of manual solving.  
+- **Responsive design:** Scales the board and keyboard together for comfortable mobile play.  
+- **Statistics tracking:** Keeps played, wins, and streak stats in the browser.  
+- **Online word lists:** Pulls multiple community-maintained word sets at runtime, with automatic fallbacks when offline.  
+- **Offline-capable:** Once loaded, gameplay continues even without a connection.
 
 ## Controls
 
-- **Letters A–Z**: type into the selected slot.
-- **Enter**: submit the guess (must be a valid 5-letter word).
-- **Backspace**: delete the **previous** slot and move left.
-- **Delete**: clear the **current** slot (caret stays).
-- **← / →**: move the caret left / right within the current row.
-- **Click a tile (current row)**: jump the caret to that slot.
-
----
+| Action | Input |
+|--------|--------|
+| Type letter | A–Z keys |
+| Submit guess | **Enter** |
+| Delete previous | **Backspace** |
+| Clear current tile | **Delete** |
+| Move caret | **← / →** |
+| Jump to tile | Click on tile (current row only) |
 
 ## Word Sources & Attribution
 
-Wordflux uses open, community-maintained word lists. See their repos for license details and updates:
+WordFlux uses open, community-maintained English word lists.  
+These data sources are credited here for transparency and acknowledgment:
 
 - **Tab Atkins — Wordle List (valid guesses)**  
   https://github.com/tabatkins/wordle-list
 
 - **DarkerMango — 5-Letter Words (valid guesses)**  
-  Repo: https://github.com/DarkerMango/5-Letter-words  
+  https://github.com/DarkerMango/5-Letter-words  
   Raw list: https://darkermango.github.io/5-Letter-words/words.txt
 
-- **Charles Reid — five-letter words (solutions pool)**  
+- **Charles Reid — five-letter words (solution pool)**  
   https://github.com/charlesreid1/five-letter-words (file: `sgb-words.txt`)
 
-- **DWYL — english words (backup source; filtered to 5 letters)**  
+- **DWYL — English words (backup source)**  
   https://github.com/dwyl/english-words (file: `words_alpha.txt`)
 
-> The app de-duplicates and uppercases words, filters to exactly 5 letters, and ensures the **solutions** set is a subset of **allowed** guesses. If online lists can’t be fetched, a small built-in fallback set is used.
-
----
+> The app automatically filters, uppercases, and de-duplicates words, ensuring all valid solutions are included within the allowed guess set.  
+> If network access fails, a small built-in fallback list is used instead.
 
 ## Quick Start
 
-1. Clone or download the repository.
-2. **Recommended:** serve locally to allow cross-origin fetches for word lists.
+1. Clone or download the repository.  
+2. Serve the folder locally to enable cross-origin fetches for the word lists:
    ```bash
-   # Python 3
    python3 -m http.server 8080
    # then open:
    http://localhost:8080/index.html
 
+## License
+
+MIT License — free for modification and use. Attribution appreciated if used publicly.
+
+### Third-Party Components
+
+- WordFlux includes a local copy of [Bootstrap](https://getbootstrap.com) © Twitter, Inc. and contributors - MIT License.  
+- Online word lists by Tab Atkins, DarkerMango, Charles Reid, and DWYL - publicly available and credited above.
+
+## Credit
+
+Created by **NQR** for puzzle solvers, designers, and curious thinkers who enjoy language as a system to decode.
+If you use *WordFlux* in a puzzle hunt or ARG, I’d love to hear about it.

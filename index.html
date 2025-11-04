@@ -1,25 +1,124 @@
 <!doctype html>
 <html lang="en" data-bs-theme="dark">
 <head>
+  <!--
+    MIT License
+    
+    Copyright (c) 2025 NQR
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+    
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+    
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+    
+    ------------------------------------------------------------
+    Third-Party Components
+    ------------------------------------------------------------
+    
+    This project uses the following open-source resources,
+    each distributed under permissive licenses compatible with the MIT License:
+    
+    - Bootstrap © Twitter, Inc. and contributors  
+      Distributed under the MIT License  
+      https://github.com/twbs/bootstrap/blob/main/LICENSE
+    
+    - Word Lists © respective maintainers  
+      The following community-maintained word datasets are used for
+      valid guesses and solution pools. Each is publicly available and
+      credited for acknowledgment:
+    
+      • Tab Atkins — Wordle List  
+        https://github.com/tabatkins/wordle-list
+    
+      • DarkerMango — 5-Letter Words  
+        https://github.com/DarkerMango/5-Letter-words  
+        Raw list: https://darkermango.github.io/5-Letter-words/words.txt
+    
+      • Charles Reid — five-letter words  
+        https://github.com/charlesreid1/five-letter-words (file: sgb-words.txt)
+    
+      • DWYL — English words  
+        https://github.com/dwyl/english-words (file: words_alpha.txt)
+    
+    These lists are used as public data sources for gameplay logic and are
+    retrieved dynamically at runtime. They are not modified, redistributed,
+    or stored beyond the user's browser session.
+    
+    All third-party components are unmodified and fully compatible with this
+    project’s MIT License.
+  -->
+
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>WordFlux · a tiny Wordle clone</title>
   <meta name="description" content="A Wordle-style game.">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap 5.3 -->
+  <link href="./assets/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Favicon links -->
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/images/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/images/android-chrome-192x192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="assets/images/android-chrome-512x512.png">
+  
   <style>
-    :root{
-      --gg-bg:#0c1020; --gg-card:#121735; --gg-ink:#eef1ff; --gg-ink-dim:#b9c6ef;
-      --gg-outline:#86a6ff; --gg-border:#2b3868;
-      --tile-correct:#3fb57f; --tile-present:#d1a341; --tile-absent:#3a4372; --tile-idle:#0f1439;
-      --board-max: 450px; --k-gap:.5rem;
+    :root {
+      --gg-bg: #0c1020;
+      --gg-fg: #e7e7ea; 
+      --gg-muted:#a6a7ad;
+      --gg-card: #151c3b;
+      --gg-outline:#86a6ff;
+      --gg-border: #2b3868;
+      --gg-ink: #eef1ff;
+      --gg-ink-dim: #b9c6ef;
+      --tile-correct:#3fb57f; 
+      --tile-present:#d1a341; 
+      --tile-absent:#3a4372; 
+      --tile-idle:#0f1439;
+      --board-max: 450px; 
+      --k-gap:.5rem;
     }
+    /* ============================================
+       BASE STYLES
+       ============================================ */
     html,body{height:100%}
-    body{ background:var(--gg-bg); color:var(--gg-ink); -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; overflow-x:hidden; }
-    body::before{ content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
-      background:
-        radial-gradient(1200px 600px at 12% -10%, #273056 0%, rgba(23,26,38,0) 60%),
-        radial-gradient(1200px 600px at 88% 110%, #1f2648 0%, rgba(23,26,38,0) 55%);
-      background-repeat:no-repeat; background-attachment: fixed; }
+    body {
+      margin: 0;
+      padding: 0;
+      background: var(--gg-bg);
+      color: var(--gg-ink);
+      font-family: system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x:hidden;
+    }
+
+    a, a:visited, a:hover, a:active { color: inherit; }
+
+    h2 {
+      margin: 16px 0 8px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+
     .gg-card{ background:linear-gradient(180deg,#151c3b,#13183a); border:1px solid var(--gg-border); border-radius:14px; box-shadow:0 10px 30px rgba(0,0,0,.35); }
     .gg-badge{ background:#1a2147; color:#a6b6f0; border:1px solid var(--gg-border); }
     .board{ display:grid; grid-template-rows:repeat(6,1fr); gap:.6rem; width:min(100%,var(--board-max)); margin-inline:auto; }
@@ -47,33 +146,198 @@
     @media (max-width:480px){ :root{--board-max:440px;--k-gap:.45rem} .row{gap:.5rem}.board{gap:.5rem} .tile{font-size:24px} }
     @media (max-width:390px){ :root{--board-max:400px;--k-gap:.4rem}  .row{gap:.45rem}.board{gap:.45rem} .tile{font-size:22px} }
     @media (max-width:340px){ :root{--board-max:360px;--k-gap:.35rem} .row{gap:.4rem}.board{gap:.4rem}   .tile{font-size:20px} }
+
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: .6rem 1rem;
+      border-bottom: 1px solid var(--gg-border);
+      width: 100%; /* now fills full card width */
+      box-sizing: border-box;
+    }
+    
+    .toolbar-left {
+      flex-shrink: 0;
+    }
+    
+    .toolbar-right {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .toolbar-right button,
+    .toolbar-right select {
+      background: #10173b;
+      color: var(--gg-ink);
+      border: 1px solid var(--gg-border);
+      border-radius: .5rem;
+      padding: .3rem .6rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    
+    .toolbar-right .success {
+      background: var(--tile-correct);
+      border-color: var(--tile-correct);
+    }
+
+    /* overwrite Bootstrap's .btn-close */
+    .btn-close,
+    .btn-close-white {
+      width: 1.25rem;
+      height: 1.25rem;
+      background: none !important;          /* remove gray box and SVG */
+      border: none;
+      color: var(--gg-ink-dim);             /* faint white */
+      font-size: 1.5rem;
+      font-weight: 600;
+      line-height: 1;
+      opacity: 0.8;
+      cursor: pointer;
+    }
+    
+    .btn-close:hover,
+    .btn-close-white:hover {
+      color: var(--gg-ink);                 /* brighter white on hover */
+      opacity: 1;
+    }
+    
+    .btn-close::before,
+    .btn-close-white::before {
+      content: "×";
+      display: inline-block;
+      font-size: 1.6rem;
+      font-weight: 600;
+      line-height: 1;
+    }
+
+    .mode-label {
+      font-size: 0.85rem;
+      color: var(--gg-muted);
+      margin-right: 0.25rem;
+    }
+
+    /* left-align just the Help modal’s content */
+    #helpModal .modal-body,
+    #helpModal .modal-title,
+    #helpModal ol { 
+      text-align: left;
+    }
+    
+    /* tidy list indentation */
+    #helpModal ol {
+      padding-left: 1.25rem;
+      margin-bottom: 0;
+    }
+
+    /* ============================================
+       LICENSE FOOTER
+       ============================================ */
+    .license-footer {
+      margin-top: 30px;
+      margin-bottom: 20px;
+      padding: 10px;
+      font-size: 11px;
+      color: var(--gg-ink-dim);
+      opacity: 0.7;
+      cursor: pointer;
+      transition: opacity 0.2s ease;
+    }
+
+    .license-footer:hover {
+      opacity: 1;
+    }
+
+    .license-modal {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--gg-card);
+      border: 2px solid var(--gg-border);
+      border-radius: 12px;
+      padding: 20px;
+      max-width: 500px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0,0,0,.6);
+      z-index: 1000;
+    }
+
+    .license-modal.show {
+      display: block;
+    }
+
+    .license-modal h3 {
+      margin-top: 0;
+      color: var(--gg-ink);
+    }
+
+    .license-modal pre {
+      white-space: pre-wrap;
+      font-size: 11px;
+      line-height: 1.5;
+      color: var(--gg-ink-dim);
+    }
+
+    .license-modal-close {
+      float: right;
+      cursor: pointer;
+      font-size: 24px;
+      color: var(--gg-ink-dim);
+      transition: color 0.2s ease;
+    }
+
+    .license-modal-close:hover {
+      color: var(--gg-ink);
+    }
+
+    .license-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 999;
+    }
+
+    .license-overlay.show {
+      display: block;
+    }
+
   </style>
 </head>
 <body>
-  <nav class="navbar navbar-expand-md bg-body-tertiary border-bottom border-dark-subtle sticky-top">
-    <div class="container-lg">
-      <a class="navbar-brand fw-bold" href="#">WordFlux</a>
-      <span class="navbar-text small text-secondary ms-1">a tiny Wordle clone</span>
-      <div class="ms-auto d-flex align-items-end gap-2">
-        <button id="btnHelp" class="btn btn-outline-info btn-sm">How to play</button>
-        <button id="btnStats" class="btn btn-outline-info btn-sm">Stats</button>
-        <div class="ms-2">
-          <label class="form-label small text-secondary mb-0">Mode</label>
-          <select id="modeSelect" class="form-select form-select-sm bg-dark text-light border-secondary">
+  <img src="assets/images/logo.png" alt="WordFlux Logo" style="max-width: 200px; height: auto; margin: 20px 0 10px;">
+  <h2>WordFlux</h2>
+  <p style="color: var(--gg-ink-dim); font-size: 14px; margin: -5px 0 15px; font-style: italic;">A tiny Wordle clone by NQR</p>
+  
+  <main class="container-lg my-4">
+    <section class="gg-card p-3 mb-3" aria-labelledby="gameTitle">
+      <div class="toolbar">
+        <div class="toolbar-left">
+          <span class="badge gg-badge" id="gameTitle">Daily Puzzle</span>
+        </div>
+      
+        <div class="toolbar-right">
+          <button id="btnHelp">How to play</button>
+          <button id="btnStats">Stats</button>
+      
+          <label for="modeSelect" class="mode-label">Mode</label>
+          <select id="modeSelect">
             <option value="daily">Daily</option>
             <option value="random">Random</option>
           </select>
-        </div>
-      </div>
-    </div>
-  </nav>
-
-  <main class="container-lg my-4">
-    <section class="gg-card p-3 mb-3" aria-labelledby="gameTitle">
-      <div class="d-flex align-items-center gap-2 pb-2 border-bottom" style="border-color:var(--gg-border) !important;">
-        <span class="badge rounded-pill gg-badge" id="gameTitle">Daily Puzzle</span>
-        <div class="ms-auto d-flex flex-wrap gap-2">
-          <button id="btnNew" class="btn btn-success btn-sm">New word</button>
+      
+          <button id="btnNew" class="success">New word</button>
         </div>
       </div>
 
@@ -85,16 +349,28 @@
   </main>
 
   <div class="modal fade" id="helpModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered"><div class="modal-content bg-dark text-light border-0">
-      <div class="modal-header border-0"><h5 class="modal-title">How to play</h5><button class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
-      <div class="modal-body">
-        <ol class="small mb-0">
-          <li>Guess the five-letter word in six tries.</li>
-          <li>Each guess must be a valid word; press <b>Enter</b> to submit.</li>
-          <li>Tile colors show how close your guess was: <span class="stat-pill" style="background:var(--tile-correct); border-color:var(--tile-correct)">correct</span> â€¢ <span class="stat-pill" style="background:var(--tile-present); border-color:var(--tile-present)">present</span> â€¢ <span class="stat-pill" style="background:var(--tile-absent); border-color:var(--tile-absent)">absent</span>.</li>
-        </ol>
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content bg-dark text-light border-0">
+        <div class="modal-header border-0">
+          <h5 class="modal-title">How to play</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"> </button>
+        </div>
+        <div class="modal-body">
+          <ol class="small mb-0 text-start">
+            <li>Guess the five-letter word in six tries.</li>
+            <li>Each guess must be a valid word; press <b>Enter</b> to submit.</li>
+            <li>
+              Tile colors show how close your guess was:<p></p>
+              <span class="stat-pill" style="background:var(--tile-correct); border-color:var(--tile-correct)">correct</span>
+              &bull;
+              <span class="stat-pill" style="background:var(--tile-present); border-color:var(--tile-present)">present</span>
+              &bull;
+              <span class="stat-pill" style="background:var(--tile-absent); border-color:var(--tile-absent)">absent</span>
+            </li>
+          </ol>
+        </div>
       </div>
-    </div></div>
+    </div>
   </div>
 
   <div class="modal fade" id="statsModal" tabindex="-1" aria-hidden="true">
@@ -111,9 +387,81 @@
     </div></div>
   </div>
 
+  <!-- License Footer -->
+  <div class="license-footer" id="licenseLink">
+    © 2025 NQR • Licensed under MIT • Click for details
+  </div>
+
+  <!-- License Modal -->
+  <div class="license-overlay" id="licenseOverlay"></div>
+  <div class="license-modal" id="licenseModal">
+    <span class="license-modal-close" id="licenseClose">&times;</span>
+    <h3>MIT License</h3>
+    <pre>Copyright (c) 2025 NQR
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+------------------------------------------------------------
+Third-Party Components
+------------------------------------------------------------
+    
+This project uses the following open-source resources, each distributed under permissive licenses compatible with the MIT License:
+    
+- Bootstrap © Twitter, Inc. and contributors  
+  Distributed under the MIT License  
+  <a href="https://github.com/twbs/bootstrap/blob/main/LICENSE" target="_blank">https://github.com/twbs/bootstrap/blob/main/LICENSE</a>
+    
+- Word Lists © respective maintainers
+  The following community-maintained word datasets are used for valid guesses and solution pools. Each is publicly available and credited for acknowledgment:
+    
+  • Tab Atkins — Wordle List  
+    <a href="https://github.com/tabatkins/wordle-list" target="_blank">https://github.com/tabatkins/wordle-list</a>
+    
+  • DarkerMango — 5-Letter Words  
+    <a href="https://github.com/DarkerMango/5-Letter-words" target="_blank">https://github.com/DarkerMango/5-Letter-words</a>  
+    Raw list: <a href="https://darkermango.github.io/5-Letter-words/words.txt" target="_blank">https://darkermango.github.io/5-Letter-words/words.txt</a>
+    
+  • Charles Reid — five-letter words  
+    <a href="https://github.com/charlesreid1/five-letter-words" target="_blank">https://github.com/charlesreid1/five-letter-words</a> (file: sgb-words.txt)
+    
+  • DWYL — English words  
+    <a href="https://github.com/dwyl/english-words" target="_blank">https://github.com/dwyl/english-words</a> (file: words_alpha.txt)
+    
+These lists are used as public data sources for gameplay logic and are retrieved dynamically at runtime. They are not modified, redistributed, or stored beyond the user's browser session.
+    
+All third-party components are unmodified and fully compatible with this project's MIT License.
+    </pre>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
   "use strict";
+  (function(){
+    const licenseLink = document.getElementById('licenseLink');
+    const licenseModal = document.getElementById('licenseModal');
+    const licenseOverlay = document.getElementById('licenseOverlay');
+    const licenseClose = document.getElementById('licenseClose');
+
+    if(!licenseLink || !licenseModal || !licenseOverlay || !licenseClose) return;
+
+    function showLicense() {
+      licenseModal.classList.add('show');
+      licenseOverlay.classList.add('show');
+    }
+
+    function hideLicense() {
+      licenseModal.classList.remove('show');
+      licenseOverlay.classList.remove('show');
+    }
+
+    licenseLink.addEventListener('click', showLicense);
+    licenseClose.addEventListener('click', hideLicense);
+    licenseOverlay.addEventListener('click', hideLicense);
+  })();
   const WORD_SOURCES = {
     allowed: [
       'https://raw.githubusercontent.com/tabatkins/wordle-list/main/words',
