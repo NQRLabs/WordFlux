@@ -4,6 +4,8 @@
 
 **WordFlux** is a compact, browser-based word puzzle inspired by *Wordle*, reimagined in a sleek dark aesthetic with responsive design, smooth animations, and intuitive controls. It’s a single-page game that runs entirely in your browser — no installation, no accounts, and no build tools required.
 
+[**View Live Demo**](nqrlabs.com/WordFlux/)
+
 ## Overview
 
 WordFlux blends clarity, responsiveness, and minimalism into a pure client-side experience.  
