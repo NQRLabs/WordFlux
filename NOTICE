@@ -1,0 +1,43 @@
+------------------------------------------------------------
+Third-Party Components
+------------------------------------------------------------
+
+This project uses the following open-source resources,
+each distributed under permissive licenses compatible with the MIT License.
+
+Word Lists © respective maintainers  
+The following community-maintained word datasets are used for
+valid guesses and solution pools. Each is publicly available and
+credited for acknowledgment:
+
+• Tab Atkins — Wordle List  
+  https://github.com/tabatkins/wordle-list
+
+• DarkerMango — 5-Letter Words  
+  https://github.com/DarkerMango/5-Letter-words  
+  Raw list: https://darkermango.github.io/5-Letter-words/words.txt
+
+• Charles Reid — five-letter words  
+  https://github.com/charlesreid1/five-letter-words (file: sgb-words.txt)
+
+• DWYL — English words  
+  https://github.com/dwyl/english-words (file: words_alpha.txt)
+
+These lists are used as public data sources for gameplay logic and are
+retrieved dynamically at runtime. They are not modified, redistributed,
+or stored beyond the user's browser session.
+
+------------------------------------------------------------
+Third-Party Components (vendored)
+------------------------------------------------------------
+
+WordFlux includes a local copy of **Bootstrap v4.4.1 (CSS only)** — MIT License  
+© 2011–2019 The Bootstrap Authors and Twitter, Inc.  
+Project: https://getbootstrap.com/  
+Source code: https://github.com/twbs/bootstrap  
+Vendored file: `assets/css/bootstrap.min.css`  
+Vendored from: https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css (retrieved 2025-11-04)  
+License file: `vendor-licenses/bootstrap.LICENSE`
+
+All third-party components are unmodified and fully compatible with this
+project’s MIT License.
