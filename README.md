@@ -8,11 +8,11 @@
 
 ## Overview
 
-WordFlux blends clarity, responsiveness, and minimalism into a pure client-side experience.  
-Players can click tiles or use keyboard navigation to type guesses, with sequential flip animations revealing the results.  
-The game offers **Daily** and **Random** modes, tracks wins and streaks locally, and fetches its vocabulary from open, community-maintained word lists.  
+WordFlux blends clarity, responsiveness, and minimalism into a pure client-side experience.
+Players can click tiles or use keyboard navigation to type guesses, with sequential flip animations revealing the results.
+The game offers **Daily** and **Random** modes, tracks wins and streaks locally, and fetches its vocabulary from open, community-maintained word lists.
 
-Everything operates fully client-side using standard browser APIs and Bootstrap’s UI components.
+Everything operates fully client-side using standard browser APIs.
 
 ## Features
 
@@ -72,7 +72,6 @@ MIT License — free for modification and use. Attribution appreciated if used p
 
 ### Third-Party Components
 
-- WordFlux includes a local copy of [Bootstrap](https://getbootstrap.com) © Twitter, Inc. and contributors - MIT License.  
 - Online word lists by Tab Atkins, DarkerMango, Charles Reid, and DWYL - publicly available and credited above.
 
 ## Credit

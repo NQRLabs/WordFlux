@@ -53,21 +53,8 @@
     retrieved dynamically at runtime. They are not modified, redistributed,
     or stored beyond the user's browser session.
     
-    ------------------------------------------------------------
-    Third-Party Components (vendored)
-    ------------------------------------------------------------
-    
-    This project includes a local copy of Bootstrap v4.4.1 (CSS only),
-    an open-source front-end framework distributed under the MIT License,
-    © 2011–2019 The Bootstrap Authors and Twitter, Inc.  
-    Project: https://getbootstrap.com/  
-    Source code: https://github.com/twbs/bootstrap  
-    Vendored file: `assets/css/bootstrap.min.css`  
-    Vendored from: https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css (retrieved 2025-11-04)  
-    License file: `vendor-licenses/bootstrap.LICENSE`
-
     All third-party components are unmodified and fully compatible with this
-    project’s MIT License.
+    project's MIT License.
   -->
 
   <meta charset="utf-8">
@@ -91,9 +78,6 @@
   <!-- Canonical URL -->
   <link rel="canonical" href="https://nqrlabs.com/WordFlux/">
 
-  <!-- Bootstrap 5.3 -->
-  <link href="./assets/css/bootstrap.min.css" rel="stylesheet">
-
   <!-- Favicon links -->
   <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon-16x16.png">
   <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon-32x32.png">
@@ -102,6 +86,187 @@
   <link rel="icon" type="image/png" sizes="512x512" href="assets/images/android-chrome-512x512.png">
   
   <style>
+    /* ============================================
+       EXTRACTED UTILITY STYLES
+       ============================================ */
+
+    /* Container */
+    .container-lg {
+      width: 100%;
+      padding-right: 15px;
+      padding-left: 15px;
+      margin-right: auto;
+      margin-left: auto;
+    }
+    @media (min-width: 992px) {
+      .container-lg {
+        max-width: 960px;
+      }
+    }
+    @media (min-width: 1200px) {
+      .container-lg {
+        max-width: 1140px;
+      }
+    }
+
+    /* Spacing utilities */
+    .my-4 {
+      margin-top: 1.5rem !important;
+      margin-bottom: 1.5rem !important;
+    }
+    .p-3 {
+      padding: 1rem !important;
+    }
+    .mb-0 {
+      margin-bottom: 0 !important;
+    }
+    .mb-2 {
+      margin-bottom: 0.5rem !important;
+    }
+    .mb-3 {
+      margin-bottom: 1rem !important;
+    }
+    .mt-3 {
+      margin-top: 1rem !important;
+    }
+
+    /* Flexbox utilities */
+    .d-flex {
+      display: -ms-flexbox !important;
+      display: flex !important;
+    }
+    .flex-wrap {
+      -ms-flex-wrap: wrap !important;
+      flex-wrap: wrap !important;
+    }
+    .gap-2 {
+      gap: 0.5rem !important;
+    }
+
+    /* Text utilities */
+    .small {
+      font-size: 80%;
+      font-weight: 400;
+    }
+    .text-start {
+      text-align: left !important;
+    }
+    .text-light {
+      color: #f8f9fa !important;
+    }
+
+    /* Background utilities */
+    .bg-dark {
+      background-color: #343a40 !important;
+    }
+
+    /* Border utilities */
+    .border-0 {
+      border: 0 !important;
+    }
+
+    /* Fade transition */
+    .fade {
+      transition: opacity 0.15s linear;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .fade {
+        transition: none;
+      }
+    }
+    .fade:not(.show) {
+      opacity: 0;
+    }
+
+    /* Modal system */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1050;
+      display: none;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      outline: 0;
+    }
+    .modal.show {
+      display: block;
+    }
+    .modal-dialog {
+      position: relative;
+      width: auto;
+      margin: 0.5rem;
+      pointer-events: none;
+    }
+    .modal.fade .modal-dialog {
+      transition: transform 0.3s ease-out;
+      transform: translate(0, -50px);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .modal.fade .modal-dialog {
+        transition: none;
+      }
+    }
+    .modal.show .modal-dialog {
+      transform: none;
+    }
+    .modal-dialog-centered {
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-align: center;
+      align-items: center;
+      min-height: calc(100% - 1rem);
+    }
+    .modal-content {
+      position: relative;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-direction: column;
+      flex-direction: column;
+      width: 100%;
+      pointer-events: auto;
+      background-color: #fff;
+      background-clip: padding-box;
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      border-radius: 0.3rem;
+      outline: 0;
+    }
+    .modal-header {
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-align: start;
+      align-items: flex-start;
+      -ms-flex-pack: justify;
+      justify-content: space-between;
+      padding: 1rem 1rem;
+      border-bottom: 1px solid #dee2e6;
+      border-top-left-radius: calc(0.3rem - 1px);
+      border-top-right-radius: calc(0.3rem - 1px);
+    }
+    .modal-title {
+      margin-bottom: 0;
+      line-height: 1.5;
+    }
+    .modal-body {
+      position: relative;
+      -ms-flex: 1 1 auto;
+      flex: 1 1 auto;
+      padding: 1rem;
+    }
+    @media (min-width: 576px) {
+      .modal-dialog {
+        max-width: 500px;
+        margin: 1.75rem auto;
+      }
+      .modal-dialog-centered {
+        min-height: calc(100% - 3.5rem);
+      }
+    }
+
+    /* ============================================
+       WORDFLUX CUSTOM STYLES
+       ============================================ */
     :root {
       --gg-bg: #0c1020;
       --gg-fg: #e7e7ea; 
@@ -146,7 +311,7 @@
     }
 
     .gg-card{ background:linear-gradient(180deg,#151c3b,#13183a); border:1px solid var(--gg-border); border-radius:14px; box-shadow:0 10px 30px rgba(0,0,0,.35); }
-    .gg-badge{ background:#1a2147; color:#a6b6f0; border:1px solid var(--gg-border); }
+    .gg-badge{ background:#1a2147; color:#a6b6f0; border:1px solid var(--gg-border); border-radius:.8rem; padding-left:5px; padding-right:5px;}
     .board{ display:grid; grid-template-rows:repeat(6,1fr); gap:.6rem; width:min(100%,var(--board-max)); margin-inline:auto; }
     .row{ display:grid; grid-template-columns:repeat(5,1fr); gap:.6rem; }
     .tile{ aspect-ratio:1/1; display:grid; place-items:center; font-weight:800; font-size:28px; text-transform:uppercase;
@@ -159,13 +324,46 @@
     .tile.absent{ background:var(--tile-absent); border-color:var(--tile-absent); color:#c9d2ff; }
     .tile.active{ outline:2px solid var(--gg-outline); box-shadow:0 0 0 3px rgba(134,166,255,.25) inset; }
     .tile.can-edit{ cursor:pointer; }
-    .kbd{ width:min(100%,var(--board-max)); margin:0 auto; padding:0 .25rem; }
-    .kbd-row{ display:flex; justify-content:center; align-items:center; gap:var(--k-gap); }
-    .key{ flex:1 1 0; min-width:0; background:#10173b; color:#fff; border:1px solid var(--gg-border); border-radius:.6rem; padding:.6rem .55rem; font-weight:700; cursor:pointer; font-size:clamp(12px,2.2vw,18px); white-space:nowrap; }
+    .kbd{ width:min(100%,var(--board-max)); margin:0 auto; padding:0 .25rem; display: flex; flex-direction: column;}
+    .kbd-row{ display:flex; justify-content:center; align-items:center; gap:var(--k-gap); padding-bottom:5px; }
+    .key{ 
+      display: flex;
+      align-items:center;
+      justify-content:center;
+      flex:1 1 0; 
+      min-width:0; 
+      /*background:#10173b;
+      border:1px solid var(--gg-border); 
+      border-radius:.6rem; */
+      background: radial-gradient(circle at 30% 0%, #202a5f 0, #10173b 55%, #050816 100%);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 0.75rem;
+      color:#fff; 
+      padding:.6rem .55rem; 
+      font-weight:700; 
+      cursor:pointer; 
+      font-size:clamp(10px,2.0vw,12px); 
+      text-align:center; 
+      white-space:nowrap; 
+      padding:0.55rem 0.7rem;
+      box-sizing:border-box;
+        /* “clickable” feel */
+      box-shadow:
+        0 2px 0 rgba(0,0,0,0.7),
+        0 0 0 1px rgba(255,255,255,0.02) inset;
+      cursor:pointer;
+      transition:
+        transform 80ms ease-out,
+        box-shadow 80ms ease-out,
+        background 150ms ease-out,
+        border-color 150ms ease-out;
+    }
     .key[data-state="correct"]{ background:var(--tile-correct); border-color:var(--tile-correct); }
     .key[data-state="present"]{ background:var(--tile-present); border-color:var(--tile-present); }
     .key[data-state="absent"]{ background:var(--tile-absent); border-color:var(--tile-absent); color:#c9d2ff; }
-    .key.wide{ flex:1.5 1 0; } .spacer{ flex:.5 0 0; }
+    /*.key.wide{ flex:5.0 1 0; } */
+    .key.wide{ flex-basis: calc(var(--key-width) * 1.7);}
+    .spacer{ flex:.5 0 0; }
     .panel{ padding:1rem; overflow:hidden; }
     .stat-pill{ background:#0f1432; border:1px solid var(--gg-border); border-radius:999px; padding:.3rem .65rem; color:#dce7ff; }
     .toastify{ position:fixed; top:16px; left:50%; transform:translateX(-50%); background:#0f1432; color:#fff; border:1px solid var(--gg-border); border-radius:.75rem; padding:.5rem .8rem; z-index:1100; box-shadow:0 10px 30px rgba(0,0,0,.45); }
@@ -211,7 +409,6 @@
       border-color: var(--tile-correct);
     }
 
-    /* overwrite Bootstrap's .btn-close */
     .btn-close,
     .btn-close-white {
       width: 1.25rem;
@@ -473,31 +670,29 @@ The following community-maintained word datasets are used for valid guesses and 
   <a href="https://github.com/dwyl/english-words" target="_blank">https://github.com/dwyl/english-words</a> (file: words_alpha.txt)
   
 These lists are used as public data sources for gameplay logic and are retrieved dynamically at runtime. They are not modified, redistributed, or stored beyond the user's browser session.
-
-------------------------------------------------------------
-Third-Party Components (vendored)
-------------------------------------------------------------
-
-This app includes a local copy of Bootstrap v4.4.1 (CSS only), licensed under the MIT License.
-
-© 2011–2019 The Bootstrap Authors and Twitter, Inc.
-Project: <a href="https://getbootstrap.com/" target="_blank">https://getbootstrap.com/</a>
-Source Code:  <a href="https://github.com/twbs/bootstrap" target="_blank">https://github.com/twbs/bootstrap</a>
-Vendored file: <a href="https://nqrlabs.com/WordFlux/assets/css/bootstrap.min.css" target="_blank">assets/css/bootstrap.min.css</a>
-Vendored from: <a href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" target="_blank">https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css</a> (retrieved 2025-11-04)
-
-The full license text is included with this app at:
-<a href="https://nqrlabs.com/WordFlux/vendor-licenses/bootstrap.LICENSE" target="_blank">vendor-licenses/bootstrap.LICENSE</a>
-
-No modifications have been made to the Bootstrap CSS except for local hosting and version pinning.
-    
-All third-party components are unmodified and fully compatible with this project's MIT License.
     </pre>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
   "use strict";
+
+  // Custom modal functions
+  function showModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (!modal) return;
+    modal.classList.add('show');
+    modal.classList.add('fade');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function hideModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (!modal) return;
+    modal.classList.remove('show');
+    document.body.style.overflow = '';
+  }
+
+  // License modal
   (function(){
     const licenseLink = document.getElementById('licenseLink');
     const licenseModal = document.getElementById('licenseModal');
@@ -520,6 +715,14 @@ All third-party components are unmodified and fully compatible with this project
     licenseClose.addEventListener('click', hideLicense);
     licenseOverlay.addEventListener('click', hideLicense);
   })();
+
+  // Help and Stats modal close handlers
+  document.querySelectorAll('[data-bs-dismiss="modal"]').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const modal = this.closest('.modal');
+      if (modal) hideModal(modal.id);
+    });
+  });
   const WORD_SOURCES = {
     allowed: [
       'https://raw.githubusercontent.com/tabatkins/wordle-list/main/words',
@@ -554,10 +757,10 @@ All third-party components are unmodified and fully compatible with this project
     statWin:document.getElementById('statWin'), statStreak:document.getElementById('statStreak'), modeSelect:document.getElementById('modeSelect'), };
   function buildBoard(){ board=Array.from({length:rows},()=>Array(cols).fill('')); els.board.innerHTML=''; for(let r=0;r<rows;r++){ const line=document.createElement('div'); line.className='row';
       for(let c=0;c<cols;c++){ const t=document.createElement('div'); t.className='tile'; t.dataset.r=r; t.dataset.c=c; t.setAttribute('aria-label',`r${r+1} c${c+1}`); t.addEventListener('click',()=>handleTileClick(r,c)); line.appendChild(t);} els.board.appendChild(line);} }
-  function buildKeyboard(){ els.keyboard.innerHTML=''; const r1=document.createElement('div'); r1.className='kbd-row'; for(const ch of 'QWERTYUIOP') r1.appendChild(makeKey(ch)); els.keyboard.appendChild(r1);
-    const r2=document.createElement('div'); r2.className='kbd-row'; r2.appendChild(spacer()); for(const ch of 'ASDFGHJKL') r2.appendChild(makeKey(ch)); r2.appendChild(spacer()); els.keyboard.appendChild(r2);
-    const r3=document.createElement('div'); r3.className='kbd-row'; r3.appendChild(makeKey('ENTER',true)); for(const ch of 'ZXCVBNM') r3.appendChild(makeKey(ch)); r3.appendChild(makeKey('DEL',true)); els.keyboard.appendChild(r3);
-    function makeKey(label,wide=false){ const b=document.createElement('button'); b.className='key'+(wide?' wide':''); b.textContent=label; b.dataset.key=label; b.addEventListener('click',()=>handleKey(label)); return b; }
+  function buildKeyboard(){ els.keyboard.innerHTML=''; const r1=document.createElement('div'); r1.className='kbd-row'; for(const ch of 'QWERTYUIOP') r1.appendChild(makeKey(ch)); r1.appendChild(makeKey('DEL',true)); els.keyboard.appendChild(r1);
+    const r2=document.createElement('div'); r2.className='kbd-row'; r2.appendChild(spacer()); for(const ch of 'ASDFGHJKL') r2.appendChild(makeKey(ch)); r2.appendChild(makeKey('&ensp;&crarr;&ensp;',true)); for(let k=0;k<2;k++) r2.appendChild(spacer()); r2.appendChild(spacer()); els.keyboard.appendChild(r2);
+    const r3=document.createElement('div'); r3.className='kbd-row'; for(let k=0;k<3;k++) r3.appendChild(spacer()); for(const ch of 'ZXCVBNM') r3.appendChild(makeKey(ch)); for(let k=0;k<13;k++) r3.appendChild(spacer()); els.keyboard.appendChild(r3);
+    function makeKey(label,wide=false){ const b=document.createElement('button'); b.className='key'+(wide?' wide':''); b.innerHTML=label; b.dataset.key=label; b.addEventListener('click',()=>handleKey(label)); return b; }
     function spacer(){ const s=document.createElement('div'); s.className='spacer'; return s; } }
   function pickDailySolution(){ const d=new Date(); const seed=d.getFullYear()*10000+(d.getMonth()+1)*100+d.getDate(); return SOLUTIONS[seed%SOLUTIONS.length]; }
   function pickRandomSolution(){ return SOLUTIONS[Math.floor(Math.random()*SOLUTIONS.length)]; }
@@ -595,9 +798,9 @@ All third-party components are unmodified and fully compatible with this project
     if(k==='ENTER'){ e.preventDefault(); submitRow(); } else if(k==='BACKSPACE'){ e.preventDefault(); backspace(); }
     else if(k==='DELETE'){ e.preventDefault(); board[row][cursor]=''; paintBoard(); } else if(/^[A-Z]$/.test(k)&&k.length===1){ type(k); } });
   document.getElementById('btnNew').addEventListener('click',()=>{ const mode=getMode(); const next=pickSolutionByMode();
-    if(mode==='daily'&&next===solution){ toast('Daily mode â€” same word for today'); } solution=next; resetGame(); toast('New word!'); });
-  document.getElementById('btnHelp').addEventListener('click',()=> new bootstrap.Modal(document.getElementById('helpModal')).show());
-  document.getElementById('btnStats').addEventListener('click',()=>{ updateStatsUI(); new bootstrap.Modal(document.getElementById('statsModal')).show(); });
+    if(mode==='daily'&&next===solution){ toast('Daily mode â€" same word for today'); } solution=next; resetGame(); toast('New word!'); });
+  document.getElementById('btnHelp').addEventListener('click',()=> showModal('helpModal'));
+  document.getElementById('btnStats').addEventListener('click',()=>{ updateStatsUI(); showModal('statsModal'); });
   function resetGame(){ finished=false; row=0; cursor=0; buildBoard(); buildKeyboard(); paintBoard(); document.querySelectorAll('.key').forEach(k=>k.removeAttribute('data-state')); }
   document.getElementById('modeSelect').addEventListener('change',(e)=>{ setMode(e.target.value); solution=pickSolutionByMode(); resetGame(); toast(`Mode: ${getMode()}`); });
   function syncModeUI(){ document.getElementById('modeSelect').value=getMode(); }
