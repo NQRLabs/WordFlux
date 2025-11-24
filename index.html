@@ -264,17 +264,26 @@
        LICENSE FOOTER
        ============================================ */
     .license-footer {
-      margin-top: 30px;
-      margin-bottom: 20px;
-      padding: 10px;
-      font-size: 11px;
+      border-top: 2px solid #b9c6ef33;
+      margin-top: 0px;
+      margin-bottom: 0px;
+      padding: 10px 8px;
+      font-size: 0.68rem;
       color: var(--gg-ink-dim);
       opacity: 0.7;
-      cursor: pointer;
-      transition: opacity 0.2s ease;
+      text-align: center;
     }
 
-    .license-footer:hover {
+    .license-footer a {
+      color: var(--dim);
+      cursor: pointer;
+      text-decoration: none; 
+      transition: opacity 0.3s ease;
+    }
+    .license-footer a:hover {
+      color: #17b399;
+      cursor: pointer;
+      text-decoration: underline; 
       opacity: 1;
     }
 
@@ -288,12 +297,13 @@
       border: 2px solid var(--gg-border);
       border-radius: 12px;
       padding: 20px;
-      max-width: 500px;
+      max-width: 700px;
       width: 90%;
       max-height: 80vh;
       overflow-y: auto;
       box-shadow: 0 20px 60px rgba(0,0,0,.6);
       z-index: 1000;
+      text-align: left;
     }
 
     .license-modal.show {
@@ -332,6 +342,7 @@
       right: 0;
       bottom: 0;
       background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(4px);
       z-index: 999;
     }
 
@@ -414,16 +425,24 @@
   </div>
 
   <!-- License Footer -->
-  <div class="license-footer" id="licenseLink">
-    © 2025 NQR • Licensed under MIT • Click for details
+  <div class="license-footer">
+    <a href="https://youtube.com/@CLU-NQR" target="_blank">YouTube</a> &middot;
+    <a href="https://discord.gg/HT9YE8rvuN" target="_blank">Discord</a> &middot;
+    <a href="https://nqrlabs.com" target="_blank">NQR Labs</a> &middot;
+    <a href="https://github.com/NQRLabs" target="_blank">GitHub</a>
+    <br>
+    &copy; 2025 NQR &middot; <a id="licenseLink">License</a>
   </div>
 
   <!-- License Modal -->
   <div class="license-overlay" id="licenseOverlay"></div>
   <div class="license-modal" id="licenseModal">
     <span class="license-modal-close" id="licenseClose">&times;</span>
-    <h3>MIT License</h3>
-    <pre>Copyright (c) 2025 NQR
+    <h3>WordFlux License</h3>
+    <pre>
+WordFlux - MIT License
+
+Copyright &copy; 2025 NQR
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
